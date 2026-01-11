@@ -21,6 +21,25 @@ from sklearn.linear_model import LinearRegression
 os.makedirs("graficos_ensayos_compresion", exist_ok=True)
 os.makedirs("graficos_modulos_elasticidad", exist_ok=True)
 
+import matplotlib as mpl
+# Configure matplotlib for STIX font - comprehensive setup
+mpl.rcParams.update({
+    # Primary font configuration
+    "font.family": "serif",              # Use serif family
+    "font.serif": ["STIX", "STIXGeneral", "STIX Two Text"], # STIX font priority
+    "mathtext.fontset": "stix",          # Math expressions in STIX
+    
+    # Explicit font specification for all text elements
+    "axes.labelsize": 18,
+    "axes.titlesize": 18, 
+    "legend.fontsize": 16,
+    "xtick.labelsize": 18,
+    "ytick.labelsize": 18,
+    "font.size": 16,
+    
+    # Line properties
+    "lines.linewidth": 1.5
+})
 
 # -----
 # Funciones para leer y procesar los datos de los ensayos de compresión.
@@ -49,31 +68,6 @@ def leer_ensayo_compresion(ruta_archivo):
 
     return carga_kN, actuador_mm, tiempo_s
 
-
-# def graficar_material(material, lista_archivos, carpeta_base):
-#     """
-#     Grafica todos los ensayos correspondientes a un material.
-#     En cada curva se muestra carga (N) vs desplazamiento (m).
-#     """
-
-#     plt.figure(figsize=(8, 6))
-
-#     for archivo in lista_archivos:
-#         ruta = os.path.join(carpeta_base, archivo)
-
-#         # Leer datos
-#         carga_kN, actuador_mm, tiempo_s = leer_ensayo_compresion(ruta)
-
-#         # Graficar
-#         plt.plot(actuador_mm, carga_kN, label=archivo.replace(".txt", ""), linewidth=2)
-
-#     plt.title(f"Ensayos de compresión: {material}", fontsize=14)
-#     plt.xlabel("Deformación del actuador [mm]", fontsize=12)
-#     plt.ylabel("Carga [kN]", fontsize=12)
-#     plt.grid(True, alpha=0.3)
-#     plt.legend()
-#     plt.tight_layout()
-#     plt.show()
 
 def graficar_material(material, lista_archivos, carpeta_base):
     """
@@ -187,31 +181,6 @@ def encontrar_rango_lineal(sigma, deform, inicio_frac=0.05, ventana=90):
 
     return mejor_sigma, mejor_deform, mejor_modelo
 
-
-# def graficar_ajuste_esfuerzo_deformacion(sigma, deform, sigma_lin, deform_lin, modelo, nombre):
-#     """
-#     Grafica σ–ε y la recta ajustada del rango elástico.
-#     """
-#     plt.figure(figsize=(8,6))
-
-#     # Curva completa
-#     plt.plot(deform, sigma, label="Curva completa", color="gray", alpha=0.6)
-
-#     # Datos usados para ajuste
-#     plt.scatter(deform_lin, sigma_lin, s=10, color="blue", label="Datos lineales usados")
-
-#     # Recta ajustada
-#     deform_pred = np.linspace(deform_lin.min(), deform_lin.max(), 100).reshape(-1,1)
-#     sigma_pred = modelo.predict(deform_pred)
-#     plt.plot(deform_pred, sigma_pred, color="red", linewidth=2, label="Ajuste lineal")
-
-#     plt.title(f"Ensayo: {nombre}")
-#     plt.xlabel("Deformación unitaria [-]")
-#     plt.ylabel("Esfuerzo [Pa]")
-#     plt.grid(True, alpha=0.3)
-#     plt.legend()
-#     plt.tight_layout()
-#     plt.show()
 
 def graficar_ajuste_esfuerzo_deformacion(sigma, deform, sigma_lin, deform_lin, modelo, nombre):
     """
